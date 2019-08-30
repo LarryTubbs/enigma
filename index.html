@@ -1,86 +1,96 @@
 <Html>
     <head>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+        <script src="enigma.js"></script>
+        <script src="machine.js"></script>
+        <script src="rotor.js"></script>
         <script type="application/javascript">
+            // const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+            var enigma = new Enigma();
+            var machine = new Machine('M3', 
+                                      new Rotor('b', enigma.arrReflector["b"], 1, 1, [0,0]),
+                                      new Rotor('III', enigma.arrRotors[3], 1, 1, enigma.arrKnockpoints[3]),
+                                      new Rotor('II', enigma.arrRotors[2], 1, 1, enigma.arrKnockpoints[2]),
+                                      new Rotor('I', enigma.arrRotors[1], 1, 1, enigma.arrKnockpoints[1]));
+            var lastLetter = '';
+            
             document.addEventListener('keydown', function(event) {
-                var key = event.key;
-                // todo: convert to lower case
-                try {
-                    document.getElementById(key).style.color = "red";
-                } catch(e) {
-
+                var key = event.key.toUpperCase();
+                if (enigma.plaintext.includes(key)) {
+                    lastLetter = machine.evaluate(key);
+                    document.getElementById(lastLetter).classList.remove("text-muted");
+                    document.getElementById(lastLetter).classList.add("text-white");
                 }
             });
 
             document.addEventListener('keyup', function(event) {
-                var key = event.key;
-                // todo: convert to lower case
-                try {
-                    document.getElementById(key).style.color = "black";
-                } catch(e) {
-
+                var key = event.key.toLocaleUpperCase();
+                
+                if (enigma.plaintext.includes(key)) {
+                    document.getElementById(lastLetter).classList.remove("text-white");
+                    document.getElementById(lastLetter).classList.add("text-muted");
                 }
             });
         </script>
     </head>
-    <body>
-        <div class="container">
+    <body class="bg-dark">
+        <div class="container bg-dark">
             <div class="row">
-                <div class="col" id="q">Q</div>
+                <div class="col text-muted" id="Q">Q</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="w">W</div>
+                <div class="col text-muted" id="W">W</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="e">E</div>
+                <div class="col text-muted" id="E">E</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="r">R</div>
+                <div class="col text-muted" id="R">R</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="t">T</div>
+                <div class="col text-muted" id="T">T</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="z">Z</div>
+                <div class="col text-muted" id="Z">Z</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="u">U</div>
+                <div class="col text-muted" id="U">U</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="i">I</div>
+                <div class="col text-muted" id="I">I</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="o">O</div>
+                <div class="col text-muted" id="O">O</div>
             </div>
             <div class="row">
                 <div class="col">&nbsp;</div>
-                <div class="col" id="a">A</div>
+                <div class="col text-muted" id="A">A</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="s">S</div>
+                <div class="col text-muted" id="S">S</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="d">D</div>
+                <div class="col text-muted" id="D">D</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="f">F</div>
+                <div class="col text-muted" id="F">F</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="g">G</div>
+                <div class="col text-muted" id="G">G</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="h">H</div>
+                <div class="col text-muted" id="H">H</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="j">J</div>
+                <div class="col text-muted" id="J">J</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="k">K</div>
+                <div class="col text-muted" id="K">K</div>
                 <div class="col">&nbsp;</div>
             </div>
             <div class="row">
-                <div class="col" id="p">P</div>
+                <div class="col text-muted" id="P">P</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="y">Y</div>
+                <div class="col text-muted" id="Y">Y</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="x">X</div>
+                <div class="col text-muted" id="X">X</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="c">C</div>
+                <div class="col text-muted" id="C">C</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="v">V</div>
+                <div class="col text-muted" id="V">V</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="b">B</div>
+                <div class="col text-muted" id="B">B</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="n">N</div>
+                <div class="col text-muted" id="N">N</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="m">M</div>
+                <div class="col text-muted" id="M">M</div>
                 <div class="col">&nbsp;</div>
-                <div class="col" id="l">L</div>
+                <div class="col text-muted" id="L">L</div>
             </div>  
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
