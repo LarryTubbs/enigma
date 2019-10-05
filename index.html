@@ -15,12 +15,14 @@
             var lastLetter = '';
             
             document.addEventListener('keydown', function(event) {
-                var key = event.key.toUpperCase();
-                if (enigma.plaintext.includes(key)) {
-                    lastLetter = machine.evaluate(key);
-                    document.getElementById(lastLetter).classList.remove("text-muted");
-                    document.getElementById(lastLetter).classList.add("text-white");
-                }
+                if (!lastLetter) {
+                    var key = event.key.toUpperCase();
+                    if (enigma.plaintext.includes(key)) {
+                        lastLetter = machine.evaluate(key);
+                        document.getElementById(lastLetter).classList.remove("text-muted");
+                        document.getElementById(lastLetter).classList.add("text-white");
+                    };
+                };
             });
 
             document.addEventListener('keyup', function(event) {
@@ -29,6 +31,7 @@
                 if (enigma.plaintext.includes(key)) {
                     document.getElementById(lastLetter).classList.remove("text-white");
                     document.getElementById(lastLetter).classList.add("text-muted");
+                    lastLetter = '';
                 }
             });
         </script>

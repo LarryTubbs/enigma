@@ -12,6 +12,7 @@ class Machine {
 
     evaluate(inputLetter) {
         // rotate the rotors
+        this.rotateRotors();
 
         // map the input letter through the plugboard
 
@@ -22,7 +23,7 @@ class Machine {
         if (this.zRotor) {
             l = this.zRotor.mapLetter(l);
         }
-        l = this.reflector.mapLetter(l);
+        l = this.reflector.mapLetterReflector(l);
         if (this.zRotor) {
             l = this.zRotor.mapLetter(l, true);
         }
@@ -34,5 +35,22 @@ class Machine {
         
         // return the resulting encoded letter
         return l;
+    }
+
+    rotateRotors() {
+        // if middle rotor on notch, rotate all three rotors
+        if (this.mRotor.onNotch()) {
+            this.lRotor.rotateUp();
+            this.mRotor.rotateUp();
+            this.rRotor.rotateUp();
+        } else 
+            // if right rotor on notch, rotate right and middle rotors
+            if (this.lRotor.onNotch()) {
+                this.mRotor.rotateUp();
+                this.rRotor.rotateUp();
+        } else {
+            // else rotate only right rotor
+            this.rRotor.rotateUp();
+        }
     }
 }
