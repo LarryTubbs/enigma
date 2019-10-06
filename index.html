@@ -1,5 +1,6 @@
 <Html>
     <head>
+        <title>Enigma Machine Simulator</title>
         <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
         <script src="enigma.js"></script>
         <script src="machine.js"></script>
@@ -13,12 +14,24 @@
                                       new Rotor('II', enigma.arrRotors[2], 1, 1, enigma.arrKnockpoints[2]),
                                       new Rotor('I', enigma.arrRotors[1], 1, 1, enigma.arrKnockpoints[1]));
             var lastLetter = '';
+            var letterCount = 0;
             
             document.addEventListener('keydown', function(event) {
                 if (!lastLetter) {
                     var key = event.key.toUpperCase();
                     if (enigma.plaintext.includes(key)) {
                         lastLetter = machine.evaluate(key);
+                        updateRotorDisplay();
+                        if (letterCount == 4) {
+                            if (document.getElementById("blockEncode").checked ) {
+                                letterCount = 0;
+                                document.getElementById("inputText").innerHTML += " ";
+                                document.getElementById("cypherText").innerHTML += " ";
+                            };
+                        };
+                        letterCount++;
+                        document.getElementById("inputText").innerHTML += key;
+                        document.getElementById("cypherText").innerHTML += lastLetter;
                         document.getElementById(lastLetter).classList.remove("text-muted");
                         document.getElementById(lastLetter).classList.add("text-white");
                     };
@@ -34,9 +47,104 @@
                     lastLetter = '';
                 }
             });
+
+            function updateRotorDisplay() {
+                if (machine.zRotor) {
+                    document.getElementById('zRotorPosition').innerHTML = enigma.plaintext.charAt(machine.zRotor.position);
+                };
+                document.getElementById('lRotorPosition').innerHTML = enigma.plaintext.charAt(machine.lRotor.position);
+                document.getElementById('mRotorPosition').innerHTML = enigma.plaintext.charAt(machine.mRotor.position);
+                document.getElementById('rRotorPosition').innerHTML = enigma.plaintext.charAt(machine.rRotor.position);
+            };
+
+            function rotateRotor(rotor, reverse) {
+                if (rotor == 'z') {
+                    if (machine.zRotor) {
+                        if (reverse) {
+                            machine.zRotor.rotateDown();
+                        } else {
+                            machine.zRotor.rotateUp();
+                        };
+                    };   
+                } else if (rotor == 'l') {
+                    if (reverse) {
+                        machine.lRotor.rotateDown();
+                    } else {
+                        machine.lRotor.rotateUp();
+                    };
+                } else if (rotor == 'm') {
+                    if (reverse) {
+                        machine.mRotor.rotateDown();
+                    } else {
+                        machine.mRotor.rotateUp();
+                    };                    
+                } else if (rotor == 'r') {
+                    if (reverse) {
+                        machine.rRotor.rotateDown();
+                    } else {
+                        machine.rRotor.rotateUp();
+                    };
+                };
+                updateRotorDisplay();
+            };
+
+            function onLoad() {
+                document.getElementById('zRotorCol').classList.add("d-none");
+            }
         </script>
     </head>
-    <body class="bg-dark">
+    <body class="bg-dark" onload="onLoad()">
+        <div class="container bg-dark">
+            <div class="row">
+                <div class="col-1">
+                    <p name="machineType" id="machineType" class="text-white">M3</p>
+                </div>
+                <div id="zRotorCol" name="zRotorCol" class="col-1">
+                    <div class="row">
+                        <button class="btn-primary" onclick="rotateRotor('z', true)">&uarr;</button>
+                    </div>
+                    <div class="row text-white">
+                        <span name="zRotorPosition" id="zRotorPosition">A</span>
+                    </div>
+                    <div class="row">
+                        <button class="btn-primary" onclick="rotateRotor('z')">&darr;</button>
+                    </div>    
+                </div>
+                <div class="col-1">
+                    <div class="row">
+                        <button class="btn-primary" onclick="rotateRotor('l', true)">&uarr;</button>
+                    </div>
+                    <div class="row text-white text-center">
+                        <span name="lRotorPosition" id="lRotorPosition">A</span>
+                    </div>
+                    <div class="row">
+                        <button class="btn-primary" onclick="rotateRotor('l')">&darr;</button>
+                    </div>    
+                </div>
+                <div class="col-1">
+                    <div class="row">
+                        <button class="btn-primary" onclick="rotateRotor('m', true)">&uarr;</button>
+                    </div>
+                    <div class="row text-white text-center">
+                        <span name="mRotorPosition" id="mRotorPosition">A</span>
+                    </div>
+                    <div class="row">
+                        <button class="btn-primary" onclick="rotateRotor('m')">&darr;</button>
+                    </div>    
+                </div>
+                <div class="col-1">
+                    <div class="row">
+                        <button class="btn-primary" onclick="rotateRotor('r', true)">&uarr;</button>
+                    </div>
+                    <div class="row text-white text-center">
+                        <span name="rRotorPosition" id="rRotorPosition">A</span>
+                    </div>
+                    <div class="row">
+                        <button class="btn-primary" onclick="rotateRotor('r')">&darr;</button>
+                    </div>    
+                </div>
+            </div>
+        </div>
         <div class="container bg-dark">
             <div class="row">
                 <div class="col text-muted" id="Q">Q</div>
@@ -95,6 +203,32 @@
                 <div class="col">&nbsp;</div>
                 <div class="col text-muted" id="L">L</div>
             </div>  
+        </div>
+        <div class="container">
+            <div class="row">
+                <div class="col-6">
+                    <span class="text-white">Input Text:<span>
+                </div>
+                <div class="col-6">
+                    <span class="text-white">Cypher Text:</span>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <textarea class="form-control readonly-plaintext" id="inputText" name="inputText" rows="5" readonly></textarea>
+                </div>
+                <div class="col-6">
+                    <textarea class="form-control readonly-plaintext" id="cypherText" name="cypherText" rows="5" readonly></textarea>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="form-check form-check-inline">
+                        <input class="form-check-input" type="checkbox" id="blockEncode" value="1">
+                        <label class="form-check-label text-white" for="inlineCheckbox1">Encode in blocks of four characters?</label>
+                    </div>
+                </div>
+            </div>
         </div>
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>

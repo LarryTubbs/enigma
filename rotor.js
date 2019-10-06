@@ -20,7 +20,7 @@ class Rotor {
     rotateUp() {
         this.position++;
         this.position = this.safetyPos(this.position);
-        console.log('Rotor ' + this.name + ' position: ' + this.position);
+        // console.log('Rotor ' + this.name + ' position: ' + this.position);
         return;
     }
     

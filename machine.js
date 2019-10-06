@@ -45,7 +45,7 @@ class Machine {
             this.rRotor.rotateUp();
         } else 
             // if right rotor on notch, rotate right and middle rotors
-            if (this.lRotor.onNotch()) {
+            if (this.rRotor.onNotch()) {
                 this.mRotor.rotateUp();
                 this.rRotor.rotateUp();
         } else {
