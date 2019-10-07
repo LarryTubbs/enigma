@@ -9,7 +9,7 @@
             // const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var enigma = new Enigma();
             var machine = new Machine('M3', 
-                                      new Rotor('b', enigma.arrReflector["b"], 1, 1, [0,0]),
+                                      new Rotor('B', enigma.arrReflector["B"], 1, 1, [0,0]),
                                       new Rotor('III', enigma.arrRotors[3], 1, 1, enigma.arrKnockpoints[3]),
                                       new Rotor('II', enigma.arrRotors[2], 1, 1, enigma.arrKnockpoints[2]),
                                       new Rotor('I', enigma.arrRotors[1], 1, 1, enigma.arrKnockpoints[1]));
@@ -90,62 +90,336 @@
 
             function onLoad() {
                 document.getElementById('zRotorCol').classList.add("d-none");
-            }
+                document.getElementById('machineType').innerHTML = 'Machine: ' + machine.type;
+                var rotorStack = 'Rotors: ';
+                rotorStack += machine.reflector.name;
+                if (machine.zRotor) {
+                    rotorStack += (' &harr; ' + machine.zRotor.name+ '(' + enigma.plaintext.charAt(machine.zRotor.ringSetting) + ')');
+                }
+                rotorStack += (' &harr; ' + machine.lRotor.name + '(' + enigma.plaintext.charAt(machine.lRotor.ringSetting) + ')');
+                rotorStack += (' &harr; ' + machine.mRotor.name+ '(' + enigma.plaintext.charAt(machine.mRotor.ringSetting) + ')');
+                rotorStack += (' &harr; ' + machine.rRotor.name+ '(' + enigma.plaintext.charAt(machine.rRotor.ringSetting) + ')');
+                document.getElementById('rotors').innerHTML = rotorStack;
+            };
+
+            function machineChanged() {
+                // determine which colums to show or hide
+                if (document.getElementById("machineTypeSelect").value == "M4") {
+                    document.getElementById("zLabel").classList.remove("d-none");
+                    document.getElementById("zSelect").classList.remove("d-none");
+                    document.getElementById("zRing").classList.remove("d-none");
+                    document.getElementById("m3Label").classList.add("d-none");
+                    document.getElementById("m3Select").classList.add("d-none");
+                    document.getElementById("m4Label").classList.remove("d-none");
+                    document.getElementById("m4Select").classList.remove("d-none");
+                    
+                } else {
+                    document.getElementById("zLabel").classList.add("d-none");
+                    document.getElementById("zSelect").classList.add("d-none");
+                    document.getElementById("zRing").classList.add("d-none");
+                    document.getElementById("m3Label").classList.remove("d-none");
+                    document.getElementById("m3Select").classList.remove("d-none");
+                    document.getElementById("m4Label").classList.add("d-none");
+                    document.getElementById("m4Select").classList.add("d-none");
+                }
+            };
+
+            function configureMachine() {
+                // load current machine settings
+
+                // display configuration controls
+                document.getElementById("configureMachine").classList.remove("d-none");
+
+                // disable configure button
+                document.getElementById("btnConfigMachine").setAttribute("disabled", "");
+            };
+
+            function cancelConfigureMachine() {
+                document.getElementById("configureMachine").classList.add("d-none");
+                document.getElementById("btnConfigMachine").removeAttribute("disabled");
+            };
         </script>
     </head>
     <body class="bg-dark" onload="onLoad()">
-        <div class="container bg-dark">
+        <div class="container bg-dark mt-3">
             <div class="row">
-                <div class="col-1">
-                    <p name="machineType" id="machineType" class="text-white">M3</p>
+                <div class="col-5 text-white">
+                    <div class="row">
+                        <span name="machineType" id="machineType"></span>
+                    </div>
+                    <div class="row">
+                        <span name="rotors" id="rotors"></span>
+                    </div> 
+                    <div class="row">
+                        <button id="btnConfigMachine" class="btn-secondary" onclick="configureMachine()">Configure...</button>
+                    </div>                                             
                 </div>
                 <div id="zRotorCol" name="zRotorCol" class="col-1">
                     <div class="row">
-                        <button class="btn-primary" onclick="rotateRotor('z', true)">&uarr;</button>
+                        <button class="btn-secondary" onclick="rotateRotor('z', true)">&uarr;</button>
                     </div>
                     <div class="row text-white">
                         <span name="zRotorPosition" id="zRotorPosition">A</span>
                     </div>
                     <div class="row">
-                        <button class="btn-primary" onclick="rotateRotor('z')">&darr;</button>
+                        <button class="btn-secondary" onclick="rotateRotor('z')">&darr;</button>
                     </div>    
                 </div>
                 <div class="col-1">
                     <div class="row">
-                        <button class="btn-primary" onclick="rotateRotor('l', true)">&uarr;</button>
+                        <button class="btn-secondary" onclick="rotateRotor('l', true)">&uarr;</button>
                     </div>
                     <div class="row text-white text-center">
                         <span name="lRotorPosition" id="lRotorPosition">A</span>
                     </div>
                     <div class="row">
-                        <button class="btn-primary" onclick="rotateRotor('l')">&darr;</button>
+                        <button class="btn-secondary" onclick="rotateRotor('l')">&darr;</button>
                     </div>    
                 </div>
                 <div class="col-1">
                     <div class="row">
-                        <button class="btn-primary" onclick="rotateRotor('m', true)">&uarr;</button>
+                        <button class="btn-secondary" onclick="rotateRotor('m', true)">&uarr;</button>
                     </div>
                     <div class="row text-white text-center">
                         <span name="mRotorPosition" id="mRotorPosition">A</span>
                     </div>
                     <div class="row">
-                        <button class="btn-primary" onclick="rotateRotor('m')">&darr;</button>
+                        <button class="btn-secondary" onclick="rotateRotor('m')">&darr;</button>
                     </div>    
                 </div>
                 <div class="col-1">
                     <div class="row">
-                        <button class="btn-primary" onclick="rotateRotor('r', true)">&uarr;</button>
+                        <button class="btn-secondary" onclick="rotateRotor('r', true)">&uarr;</button>
                     </div>
                     <div class="row text-white text-center">
                         <span name="rRotorPosition" id="rRotorPosition">A</span>
                     </div>
                     <div class="row">
-                        <button class="btn-primary" onclick="rotateRotor('r')">&darr;</button>
+                        <button class="btn-secondary" onclick="rotateRotor('r')">&darr;</button>
                     </div>    
                 </div>
             </div>
         </div>
-        <div class="container bg-dark">
+        <div id="configureMachine" class="container bg-dark text-white mt-3 d-none">
+            <div class="row">
+                <div class="col-2">
+                    <label for="machineTypeSelect" class="bg-dark text-white">Machine</label>
+                </div>
+                <div id="m3Label" class="col-2">
+                    <label for="m3reflectorSelect" class="bg-dark text-white">Reflector</label>
+                </div>
+                <div id="m4Label" class="col-2 d-none">
+                    <label for="m4reflectorSelect" class="bg-dark text-white">Reflector</label>    
+                </div>
+                <div id="zLabel" class="col-2 d-none">
+                    <label for="zRotorSelect" class="bg-dark text-white">Greek Rotor</label>
+                </div>
+                <div class="col-2">
+                    <label for="lRotorSelect" class="bg-dark text-white">Left Rotor</label>
+                </div>
+                <div class="col-2">
+                    <label for="mRotorSelect" class="bg-dark text-white">Mid Rotor</label>
+                </div>
+                <div class="col-2">
+                    <label for="rRotorSelect" class="bg-dark text-white">Right Rotor</label>
+                </div>    
+            </div>
+            <div class="row">
+                <div class="col-2">
+                    <select name="machineTypeSelect" id="machineTypeSelect" class="form-control" onchange="machineChanged()">
+                        <option value="M3">M3</option>
+                        <option value="M4">M4</option>
+                    </select>
+                </div>
+                <div id="m3Select" class="col-2">
+                    <select name="m3reflectorSelect" id="m3reflectorSelect" class="form-control">
+                        <option value="B">B</option>
+                        <option value="C">C</option>
+                    </select>                   
+                </div>
+                <div id="m4Select" class="col-2 d-none">
+                        <select name="m4reflectorSelect" id="m3reflectorSelect" class="form-control">
+                            <option value="b_thin">B (Thin)</option>
+                            <option value="c_thin">C (Thin)</option>
+                        </select>                   
+                </div>
+                <div id="zSelect" class="col-2 d-none">
+                    <select name="zRotorSelect" id="zRotorSelect" class="form-control">
+                        <option value="b">&beta;</option>
+                        <option value="g">&gamma;</option>
+                    </select>                   
+                </div>
+                <div class="col-2">
+                    <select name="lRotorSelect" id="lRotorSelect" class="form-control">
+                        <option value="1">I</option>
+                        <option value="2">II</option>
+                        <option value="3">III</option>
+                        <option value="4">IV</option>
+                        <option value="5">V</option>
+                        <option value="6">VI</option>
+                        <option value="7">VII</option>
+                        <option value="8">VIII</option>
+                    </select>                   
+                </div> 
+                <div class="col-2">
+                    <select name="mRotorSelect" id="mRotorSelect" class="form-control">
+                            <option value="1">I</option>
+                            <option value="2">II</option>
+                            <option value="3">III</option>
+                            <option value="4">IV</option>
+                            <option value="5">V</option>
+                            <option value="6">VI</option>
+                            <option value="7">VII</option>
+                            <option value="8">VIII</option>
+                    </select>                   
+                </div> 
+                <div class="col-2">
+                    <select name="rRotorSelect" id="rRotorSelect" class="form-control">
+                            <option value="1">I</option>
+                            <option value="2">II</option>
+                            <option value="3">III</option>
+                            <option value="4">IV</option>
+                            <option value="5">V</option>
+                            <option value="6">VI</option>
+                            <option value="7">VII</option>
+                            <option value="8">VIII</option>
+                    </select>                   
+                </div>   
+            </div>
+            <div class="row mt-3">
+                <div class="col-2">
+                    <span>&nbsp;</span>
+                </div>
+                <div class="col-2">
+                    <span>Ring Setting:</span>
+                </div>
+                <div id="zRing" class="col-2 d-none">
+                    <select name="zRingSetting" id="zRingSetting" class="form-control">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                        <option value="5">E</option>
+                        <option value="6">F</option>
+                        <option value="7">G</option>
+                        <option value="8">H</option>
+                        <option value="9">I</option>
+                        <option value="10">J</option>
+                        <option value="11">K</option>
+                        <option value="12">L</option>
+                        <option value="13">M</option>
+                        <option value="14">N</option>
+                        <option value="15">O</option>
+                        <option value="16">P</option>
+                        <option value="17">Q</option>
+                        <option value="18">R</option>
+                        <option value="19">S</option>
+                        <option value="20">T</option>
+                        <option value="21">U</option>
+                        <option value="22">V</option>
+                        <option value="23">W</option>
+                        <option value="24">X</option>
+                        <option value="25">Y</option>
+                        <option value="26">Z</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <select name="lRingSetting" id="lRingSetting" class="form-control">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                        <option value="5">E</option>
+                        <option value="6">F</option>
+                        <option value="7">G</option>
+                        <option value="8">H</option>
+                        <option value="9">I</option>
+                        <option value="10">J</option>
+                        <option value="11">K</option>
+                        <option value="12">L</option>
+                        <option value="13">M</option>
+                        <option value="14">N</option>
+                        <option value="15">O</option>
+                        <option value="16">P</option>
+                        <option value="17">Q</option>
+                        <option value="18">R</option>
+                        <option value="19">S</option>
+                        <option value="20">T</option>
+                        <option value="21">U</option>
+                        <option value="22">V</option>
+                        <option value="23">W</option>
+                        <option value="24">X</option>
+                        <option value="25">Y</option>
+                        <option value="26">Z</option>
+                    </select>
+                </div>
+                <div class="col-2">
+                    <select name="mRingSetting" id="mRingSetting" class="form-control">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                        <option value="5">E</option>
+                        <option value="6">F</option>
+                        <option value="7">G</option>
+                        <option value="8">H</option>
+                        <option value="9">I</option>
+                        <option value="10">J</option>
+                        <option value="11">K</option>
+                        <option value="12">L</option>
+                        <option value="13">M</option>
+                        <option value="14">N</option>
+                        <option value="15">O</option>
+                        <option value="16">P</option>
+                        <option value="17">Q</option>
+                        <option value="18">R</option>
+                        <option value="19">S</option>
+                        <option value="20">T</option>
+                        <option value="21">U</option>
+                        <option value="22">V</option>
+                        <option value="23">W</option>
+                        <option value="24">X</option>
+                        <option value="25">Y</option>
+                        <option value="26">Z</option>
+                    </select>        
+                </div>
+                <div class="col-2">
+                    <select name="rRingSetting" id="rRingSetting" class="form-control">
+                        <option value="1">A</option>
+                        <option value="2">B</option>
+                        <option value="3">C</option>
+                        <option value="4">D</option>
+                        <option value="5">E</option>
+                        <option value="6">F</option>
+                        <option value="7">G</option>
+                        <option value="8">H</option>
+                        <option value="9">I</option>
+                        <option value="10">J</option>
+                        <option value="11">K</option>
+                        <option value="12">L</option>
+                        <option value="13">M</option>
+                        <option value="14">N</option>
+                        <option value="15">O</option>
+                        <option value="16">P</option>
+                        <option value="17">Q</option>
+                        <option value="18">R</option>
+                        <option value="19">S</option>
+                        <option value="20">T</option>
+                        <option value="21">U</option>
+                        <option value="22">V</option>
+                        <option value="23">W</option>
+                        <option value="24">X</option>
+                        <option value="25">Y</option>
+                        <option value="26">Z</option>
+                    </select>
+                </div>    
+            </div>
+            <div class="row">
+                <button class="btn btn-primary ml-3">Save</button>
+                <button class="btn btn-danger ml-1" onclick="cancelConfigureMachine()">Cancel</button>
+            </div>
+        </div>
+        <div class="container bg-dark mt-3 mb-3">
             <div class="row">
                 <div class="col text-muted" id="Q">Q</div>
                 <div class="col">&nbsp;</div>
@@ -207,10 +481,10 @@
         <div class="container">
             <div class="row">
                 <div class="col-6">
-                    <span class="text-white">Input Text:<span>
+                    <span class="text-white">Input:<span>
                 </div>
                 <div class="col-6">
-                    <span class="text-white">Cypher Text:</span>
+                    <span class="text-white">Output:</span>
                 </div>
             </div>
             <div class="row">

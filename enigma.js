@@ -33,8 +33,8 @@ class Enigma {
     
         // Reflectors "B" and "C" (inc M4 thin reflectors) Wiring
         this.arrReflector = new Array();
-            this.arrReflector["b"] = ".YRUHQSLDPXNGOKMIEBFZCWVJAT";      // M3 B
-            this.arrReflector["c"] = ".FVPJIAOYEDRZXWGCTKUQSBNMHL";      // M3 C
+            this.arrReflector["B"] = ".YRUHQSLDPXNGOKMIEBFZCWVJAT";      // M3 B
+            this.arrReflector["C"] = ".FVPJIAOYEDRZXWGCTKUQSBNMHL";      // M3 C
             this.arrReflector["b_thin"] = ".ENKQAUYWJICOPBLMDXZVFTHRGS"; // M4 thin B
             this.arrReflector["c_thin"] = ".RDOBJNTKVEHMLFCWZAXGYIPSUQ"; // M4 thin C
     
