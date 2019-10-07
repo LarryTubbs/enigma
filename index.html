@@ -155,48 +155,40 @@
                     </div>                                             
                 </div>
                 <div id="zRotorCol" name="zRotorCol" class="col-1">
-                    <div class="row">
-                        <button class="btn-secondary" onclick="rotateRotor('z', true)">&uarr;</button>
-                    </div>
-                    <div class="row text-white">
-                        <span name="zRotorPosition" id="zRotorPosition">A</span>
-                    </div>
-                    <div class="row">
-                        <button class="btn-secondary" onclick="rotateRotor('z')">&darr;</button>
+                    <div class="row align-items-center">
+                        <span name="zRotorPosition" id="zRotorPosition" class="text-white mr-1">A</span>
+                        <div class="btn-group-vertical">
+                            <button class="btn-secondary" onclick="rotateRotor('z')">&uarr;</button>
+                            <button class="btn-secondary" onclick="rotateRotor('z', true)">&darr;</button>
+                        </div>
                     </div>    
                 </div>
                 <div class="col-1">
-                    <div class="row">
-                        <button class="btn-secondary" onclick="rotateRotor('l', true)">&uarr;</button>
+                    <div class="row align-items-center">
+                        <span class="text-white mr-1" name="lRotorPosition" id="lRotorPosition">A</span>
+                        <div class="btn-group-vertical">
+                            <button class="btn-secondary" onclick="rotateRotor('l')">&uarr;</button>
+                            <button class="btn-secondary" onclick="rotateRotor('l', true)">&darr;</button>
+                        </div>
                     </div>
-                    <div class="row text-white text-center">
-                        <span name="lRotorPosition" id="lRotorPosition">A</span>
-                    </div>
-                    <div class="row">
-                        <button class="btn-secondary" onclick="rotateRotor('l')">&darr;</button>
-                    </div>    
                 </div>
                 <div class="col-1">
-                    <div class="row">
-                        <button class="btn-secondary" onclick="rotateRotor('m', true)">&uarr;</button>
+                    <div class="row align-items-center">
+                            <span class="text-white mr-1" name="mRotorPosition" id="mRotorPosition">A</span>
+                            <div class="btn-group-vertical">
+                                <button class="btn-secondary" onclick="rotateRotor('m')">&uarr;</button>
+                                <button class="btn-secondary" onclick="rotateRotor('m', true)">&darr;</button>
+                            </div>
                     </div>
-                    <div class="row text-white text-center">
-                        <span name="mRotorPosition" id="mRotorPosition">A</span>
-                    </div>
-                    <div class="row">
-                        <button class="btn-secondary" onclick="rotateRotor('m')">&darr;</button>
-                    </div>    
                 </div>
                 <div class="col-1">
-                    <div class="row">
-                        <button class="btn-secondary" onclick="rotateRotor('r', true)">&uarr;</button>
+                    <div class="row align-items-center">
+                        <span class="text-white mr-1" name="rRotorPosition" id="rRotorPosition">A</span>
+                        <div class="btn-group-vertical">
+                            <button class="btn-secondary" onclick="rotateRotor('r')">&uarr;</button>
+                            <button class="btn-secondary" onclick="rotateRotor('r', true)">&darr;</button>
+                        </div>
                     </div>
-                    <div class="row text-white text-center">
-                        <span name="rRotorPosition" id="rRotorPosition">A</span>
-                    </div>
-                    <div class="row">
-                        <button class="btn-secondary" onclick="rotateRotor('r')">&darr;</button>
-                    </div>    
                 </div>
             </div>
         </div>
