@@ -15,9 +15,10 @@ class Machine {
         this.rotateRotors();
 
         // map the input letter through the plugboard
+        var l = this.plugboard.mapLetter(inputLetter);
 
         // map the resulting letter into the rotors
-        var l = this.rRotor.mapLetter(inputLetter);
+        l = this.rRotor.mapLetter(l);
         l = this.mRotor.mapLetter(l);
         l = this.lRotor.mapLetter(l);
         if (this.zRotor) {
@@ -32,7 +33,8 @@ class Machine {
         l = this.rRotor.mapLetter(l, true);
 
         // map back through the plugboard
-        
+        var l = this.plugboard.mapLetter(l);
+
         // return the resulting encoded letter
         return l;
     }

@@ -5,6 +5,7 @@
         <script src="enigma.js"></script>
         <script src="machine.js"></script>
         <script src="rotor.js"></script>
+        <script src="plugboard.js"></script>
         <script type="application/javascript">
             // const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var enigma = new Enigma();
@@ -12,14 +13,17 @@
                                       new Rotor('B', enigma.arrReflector["B"], 1, 1, [0,0]),
                                       new Rotor('III', enigma.arrRotors[3], 1, 1, enigma.arrKnockpoints[3]),
                                       new Rotor('II', enigma.arrRotors[2], 1, 1, enigma.arrKnockpoints[2]),
-                                      new Rotor('I', enigma.arrRotors[1], 1, 1, enigma.arrKnockpoints[1]));
+                                      new Rotor('I', enigma.arrRotors[1], 1, 1, enigma.arrKnockpoints[1]),
+                                      null,
+                                      new Plugboard([]));
             var lastLetter = '';
             var letterCount = 0;
+            var encoding = true;
             
             document.addEventListener('keydown', function(event) {
-                if (!lastLetter) {
-                    var key = event.key.toUpperCase();
-                    if (enigma.plaintext.includes(key)) {
+                if (!lastLetter && encoding) {
+                    var key = event.key.toLocaleUpperCase();
+                    if (enigma.plaintext.includes(key) && key != '.') {
                         lastLetter = machine.evaluate(key);
                         updateRotorDisplay();
                         if (letterCount == 4) {
@@ -39,13 +43,16 @@
             });
 
             document.addEventListener('keyup', function(event) {
-                var key = event.key.toLocaleUpperCase();
+                if (encoding) {
+                    var key = event.key.toLocaleUpperCase();
                 
-                if (enigma.plaintext.includes(key)) {
-                    document.getElementById(lastLetter).classList.remove("text-white");
-                    document.getElementById(lastLetter).classList.add("text-muted");
-                    lastLetter = '';
-                }
+                    if (enigma.plaintext.includes(key) && key != '.') {
+                        document.getElementById(lastLetter).classList.remove("text-white");
+                        document.getElementById(lastLetter).classList.add("text-muted");
+                        lastLetter = '';
+                    }
+                };
+                
             });
 
             function updateRotorDisplay() {
@@ -125,7 +132,9 @@
             };
 
             function configureMachine() {
-                // load current machine settings
+                encoding = false;
+
+                // TODO: load current machine settings
 
                 // display configuration controls
                 document.getElementById("configureMachine").classList.remove("d-none");
@@ -135,9 +144,20 @@
             };
 
             function cancelConfigureMachine() {
+                encoding = true;
                 document.getElementById("configureMachine").classList.add("d-none");
                 document.getElementById("btnConfigMachine").removeAttribute("disabled");
             };
+
+            function saveConfigureMachine() {
+                encoding = true;
+
+                // TODO: save machine settings
+                alert('not yet implemented');
+
+                document.getElementById("configureMachine").classList.add("d-none");
+                document.getElementById("btnConfigMachine").removeAttribute("disabled");
+            }
         </script>
     </head>
     <body class="bg-dark" onload="onLoad()">
@@ -406,8 +426,24 @@
                     </select>
                 </div>    
             </div>
-            <div class="row">
-                <button class="btn btn-primary ml-3">Save</button>
+            <div class="row ml-1">
+                <span>Plugboard</span>
+            </div>
+            <div class="row ml-1">
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb1" name="pb1"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb2" name="pb2"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb3" name="pb3"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb4" name="pb4"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb5" name="pb5"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb6" name="pb6"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb7" name="pb7"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb8" name="pb8"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb9" name="pb9"></input>
+                <input type="text" class="form-control-sm form-inline mr-1" style="width: 50px" id="pb10" name="pb10"></input>
+                
+            </div>
+            <div class="row mt-2">
+                <button class="btn btn-primary ml-3" onclick="saveConfigureMachine()">Save</button>
                 <button class="btn btn-danger ml-1" onclick="cancelConfigureMachine()">Cancel</button>
             </div>
         </div>
