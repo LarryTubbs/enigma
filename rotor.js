@@ -40,7 +40,6 @@ class Rotor {
         
         // adjust for position
         var adjPos = inputPos + (this.position - 1);
-        
         adjPos = this.safetyPos(adjPos);
 
         // TODO: Adjust for Ring Setting

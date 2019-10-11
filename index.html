@@ -97,6 +97,10 @@
 
             function onLoad() {
                 document.getElementById('zRotorCol').classList.add("d-none");
+                updateMachineInfo();
+            };
+
+            function updateMachineInfo() {
                 document.getElementById('machineType').innerHTML = 'Machine: ' + machine.type;
                 var rotorStack = 'Rotors: ';
                 rotorStack += machine.reflector.name;
@@ -151,6 +155,21 @@
 
             function saveConfigureMachine() {
                 encoding = true;
+
+                // determine machine type:
+                var machineType = document.getElementById("machineTypeSelect").value;
+
+                // validation
+                // are all rotors unique?
+                var rotors = [];
+                if (machineType == "M4") {
+                    rotors.push(document.getElementById("zRotorSelect"));
+                };
+                if (rotors.includes(document.getElementById("lRotorSelect"))) {
+                    rotors.push(document.getElementById("lRotorSelect"));
+                } else {
+                    throw new error("rotors must all be unique");
+                };
 
                 // TODO: save machine settings
                 alert('not yet implemented');
