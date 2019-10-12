@@ -15,7 +15,7 @@
                                       new Rotor('II', enigma.arrRotors[2], 1, 1, enigma.arrKnockpoints[2]),
                                       new Rotor('I', enigma.arrRotors[1], 1, 1, enigma.arrKnockpoints[1]),
                                       null,
-                                      new Plugboard(["AB", "CD", "EF", "GH", "IJ", "KL", "MN", "OP", "QR"]));
+                                      null);
             var lastLetter = '';
             var letterCount = 0;
             var encoding = true;
@@ -148,35 +148,81 @@
             };
 
             function cancelConfigureMachine() {
+                $("#configureMachine").addClass("d-none");
+                $("#btnConfigMachine").prop("disabled", false);
                 encoding = true;
-                document.getElementById("configureMachine").classList.add("d-none");
-                document.getElementById("btnConfigMachine").removeAttribute("disabled");
             };
 
             function saveConfigureMachine() {
-                encoding = true;
-
+                
                 // determine machine type:
-                var machineType = document.getElementById("machineTypeSelect").value;
-
+                var machineType = $("#machineTypeSelect").val();
+                var plugboard;
                 // validation
-                // are all rotors unique?
+                
+                try {
+                    // are all rotors unique?
+                    validateRotors(machineType);
+
+                    // set up plugboard, catch any validation errors
+                    var plugs = [];
+                    for (i = 1; i <= 10; i++) {
+                        plugs.push($("#pb" + i).val()); 
+                    }; 
+                    plugboard = new Plugboard(plugs);
+                    
+                } catch (e) {
+                    // todo: improve error message display 
+                    alert(e);
+                    return;
+                };
+                
+                if (machineType == "M3") {
+                    machine = new Machine(machineType, 
+                                      new Rotor($("#m3reflectorSelect option:selected").text(), enigma.arrReflector[$("#m3reflectorSelect").val()], 1, 1, [0,0]),
+                                      new Rotor($("#rRotorSelect option:selected").text(), enigma.arrRotors[$("#rRotorSelect").val()], $("#rRingSetting").val(), 1, enigma.arrKnockpoints[$("#rRotorSelect").val()]),
+                                      new Rotor($("#mRotorSelect option:selected").text(), enigma.arrRotors[$("#mRotorSelect").val()], $("#mRingSetting").val(), 1, enigma.arrKnockpoints[$("#mRotorSelect").val()]),
+                                      new Rotor($("#lRotorSelect option:selected").text(), enigma.arrRotors[$("#lRotorSelect").val()], $("#lRingSetting").val(), 1, enigma.arrKnockpoints[$("#lRotorSelect").val()]),
+                                      null,
+                                      plugboard);
+                    $("#zRotorCol").addClass("d-none");
+                } else {
+                    machine = new Machine(machineType, 
+                                      new Rotor($("#m4reflectorSelect option:selected").text(), enigma.arrReflector[$("#m4reflectorSelect").val()], 1, 1, [0,0]),
+                                      new Rotor($("#rRotorSelect option:selected").text(), enigma.arrRotors[$("#rRotorSelect").val()], $("#rRingSetting").val(), 1, enigma.arrKnockpoints[$("#rRotorSelect").val()]),
+                                      new Rotor($("#mRotorSelect option:selected").text(), enigma.arrRotors[$("#mRotorSelect").val()], $("#mRingSetting").val(), 1, enigma.arrKnockpoints[$("#mRotorSelect").val()]),
+                                      new Rotor($("#lRotorSelect option:selected").text(), enigma.arrRotors[$("#lRotorSelect").val()], $("#lRingSetting").val(), 1, enigma.arrKnockpoints[$("#lRotorSelect").val()]),
+                                      new Rotor($("#zRotorSelect option:selected").text(), enigma.arrRotors[$("#zRotorSelect").val()], $("#zRingSetting").val(), 1, [0,0]),
+                                      plugboard);
+                    $("#zRotorCol").removeClass("d-none");
+                };
+                
+                $("#configureMachine").addClass("d-none");
+                $("#btnConfigMachine").prop("disabled", false);
+                updateMachineInfo();
+                encoding = true;
+            }
+
+            function validateRotors(machineType) {
                 var rotors = [];
                 if (machineType == "M4") {
-                    rotors.push(document.getElementById("zRotorSelect"));
+                    rotors.push($("#zRotorSelect").val());
                 };
-                if (rotors.includes(document.getElementById("lRotorSelect"))) {
-                    rotors.push(document.getElementById("lRotorSelect"));
+                validateRotor(rotors, "lRotorSelect");
+                validateRotor(rotors, "mRotorSelect");
+                validateRotor(rotors, "rRotorSelect");
+                return true;
+            };
+
+            function validateRotor(rotors, newRotor) {
+                if (!rotors.includes($("#" + newRotor).val())) {
+                    rotors.push($("#" + newRotor).val());
                 } else {
-                    throw new error("rotors must all be unique");
+                    throw new Error("rotors must all be unique");
                 };
+                return true;
+            };
 
-                // TODO: save machine settings
-                alert('not yet implemented');
-
-                document.getElementById("configureMachine").classList.add("d-none");
-                document.getElementById("btnConfigMachine").removeAttribute("disabled");
-            }
         </script>
     </head>
     <body class="bg-dark" onload="onLoad()">
@@ -269,7 +315,7 @@
                     </select>                   
                 </div>
                 <div id="m4Select" class="col-2 d-none">
-                        <select name="m4reflectorSelect" id="m3reflectorSelect" class="form-control">
+                        <select name="m4reflectorSelect" id="m4reflectorSelect" class="form-control">
                             <option value="b_thin">B (Thin)</option>
                             <option value="c_thin">C (Thin)</option>
                         </select>                   
