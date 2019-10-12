@@ -42,7 +42,9 @@ class Rotor {
         var adjPos = inputPos + (this.position - 1);
         adjPos = this.safetyPos(adjPos);
 
-        // TODO: Adjust for Ring Setting
+        // adjust for Ring Setting
+        adjPos = adjPos - (this.ringSetting - 1);
+        adjPos = this.safetyPos(adjPos);
              
         if (! reverse ) {
             mappedChar =  this.wireing.charAt(adjPos);
@@ -52,7 +54,9 @@ class Rotor {
             outputPos = this.wireing.indexOf(mappedChar);
         };
 
-        // TODO: Readjust for Ring Setting
+        // readjust for Ring Setting
+        outputPos = outputPos + (this.ringSetting - 1);
+        outputPos = this.safetyPos(outputPos);
 
         // readjust for position 
         outputPos = outputPos - (this.position - 1);

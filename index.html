@@ -7,7 +7,6 @@
         <script src="rotor.js"></script>
         <script src="plugboard.js"></script>
         <script type="application/javascript">
-            // const letters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
             var enigma = new Enigma();
             var machine = new Machine('M3', 
                                       new Rotor('B', enigma.arrReflector["B"], 1, 1, [0,0]),
@@ -15,7 +14,7 @@
                                       new Rotor('II', enigma.arrRotors[2], 1, 1, enigma.arrKnockpoints[2]),
                                       new Rotor('I', enigma.arrRotors[1], 1, 1, enigma.arrKnockpoints[1]),
                                       null,
-                                      null);
+                                      new Plugboard([]));
             var lastLetter = '';
             var letterCount = 0;
             var encoding = true;
@@ -96,7 +95,9 @@
             };
 
             function onLoad() {
-                document.getElementById('zRotorCol').classList.add("d-none");
+                $('#zRotorCol').addClass("d-none");
+                $("#mRotorSelect").val(2);
+                $("#rRotorSelect").val(3);
                 updateMachineInfo();
             };
 
@@ -137,8 +138,6 @@
 
             function configureMachine() {
                 encoding = false;
-
-                // TODO: load current machine settings
 
                 // display configuration controls
                 document.getElementById("configureMachine").classList.remove("d-none");
@@ -197,6 +196,7 @@
                     $("#zRotorCol").removeClass("d-none");
                 };
                 
+                updateRotorDisplay();
                 $("#configureMachine").addClass("d-none");
                 $("#btnConfigMachine").prop("disabled", false);
                 updateMachineInfo();
