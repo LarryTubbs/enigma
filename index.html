@@ -15,6 +15,7 @@
                                       new Rotor('I', enigma.arrRotors[1], 1, 1, enigma.arrKnockpoints[1]),
                                       null,
                                       new Plugboard([]));
+            var defaultRotorPositions = [1,1,1]; 
             var lastLetter = '';
             var letterCount = 0;
             var encoding = true;
@@ -201,7 +202,39 @@
                 $("#btnConfigMachine").prop("disabled", false);
                 updateMachineInfo();
                 encoding = true;
-            }
+            };
+
+            function saveDefaults() {
+                defaultRotorPositions = [];
+                if (machine.zRotor) {
+                    defaultRotorPositions.push(machine.zRotor.position);
+                };
+                defaultRotorPositions.push(machine.lRotor.position);
+                defaultRotorPositions.push(machine.mRotor.position);
+                defaultRotorPositions.push(machine.rRotor.position);
+                alert("config saved");
+            };
+
+            function restoreDefaults() {
+                var pos = 0;
+                if (machine.zRotor) { 
+                    machine.zRotor.position = defaultRotorPositions[pos++];
+                };
+                machine.lRotor.position = defaultRotorPositions[pos++]
+                machine.mRotor.position = defaultRotorPositions[pos++]
+                machine.rRotor.position = defaultRotorPositions[pos++]
+                updateMachineInfo();
+                updateRotorDisplay();
+                $("#inputText").html("");
+                $("#cypherText").html("");
+                lastLetter = "";
+            };
+
+            function saveMachineConfigAs() {
+                // todo: implement this
+                alert("not yet implemented");
+            };
+
 
             function validateRotors(machineType) {
                 var rotors = [];
@@ -237,6 +270,7 @@
                     </div> 
                     <div class="row">
                         <button id="btnConfigMachine" class="btn-secondary" onclick="configureMachine()">Configure...</button>
+                        <button id="btnSetDefaultConfig" class="btn-secondary ml-1" onclick="saveDefaults()">Set as Default</button>
                     </div>                                             
                 </div>
                 <div id="zRotorCol" name="zRotorCol" class="col-1">
@@ -588,12 +622,14 @@
                     <textarea class="form-control readonly-plaintext" id="cypherText" name="cypherText" rows="5" readonly></textarea>
                 </div>
             </div>
-            <div class="row">
+            <div class="row mt-3">
                 <div class="col">
                     <div class="form-check form-check-inline">
                         <input class="form-check-input" type="checkbox" id="blockEncode" value="1">
                         <label class="form-check-label text-white" for="inlineCheckbox1">Encode in blocks of four characters?</label>
                     </div>
+                    <button class="btn-secondary" onclick="saveMachineConfigAs()">Save Machine Config...</button>
+                    <button class="btn-secondary" onclick="restoreDefaults()">New Message</button>
                 </div>
             </div>
         </div>
